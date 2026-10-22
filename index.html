@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dulces Sueños, Mi Loquita Linda ✨</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #020617;
+            overflow: hidden; /* Evita cualquier desplazamiento o scroll */
+            height: 100vh;
+            width: 100vw;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Glassmorphism con bordes strictly AZULES */
+        .liquid-glass {
+            background: rgba(8, 18, 38, 0.55); /* Un poco más legible pero completamente translúcido */
+            backdrop-filter: blur(12px) saturate(160%);
+            -webkit-backdrop-filter: blur(12px) saturate(160%);
+            border: 1.5px solid #3b82f6; /* Azul puro */
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.35),
+                        inset 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Texto Morado Elegante */
+        .purple-glow-text {
+            color: #c084fc;
+            text-shadow: 0 0 10px rgba(192, 132, 252, 0.8), 0 0 20px rgba(168, 85, 247, 0.5);
+            font-weight: 800;
+        }
+
+        /* Fondo de lienzo para las estrellas */
+        #starsCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            display: block;
+        }
+
+        /* Animación suave flotante */
+        .animate-float {
+            animation: float 3.5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* Classes para animaciones de deslizar hacia la izquierda */
+        .slide-out-left {
+            animation: slideOutLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideOutLeft {
+            0% {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+            100% {
+                transform: translateX(-120%) scale(0.92);
+                opacity: 0;
+                filter: blur(4px);
+            }
+        }
+
+        @keyframes slideInRight {
+            0% {
+                transform: translateX(120%) scale(0.92);
+                opacity: 0;
+                filter: blur(4px);
+            }
+            100% {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        /* Barra de Carga de Cristal Neón con Pulso */
+        .glow-progress-track {
+            background: rgba(2, 6, 23, 0.85);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8), 0 0 10px rgba(59, 130, 246, 0.2);
+            position: relative;
+        }
+
+        .glow-progress-fill {
+            background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 50%, #a855f7 100%);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.9), 0 0 25px rgba(168, 85, 247, 0.6);
+            position: relative;
+        }
+
+        .glow-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 8px;
+            background: #ffffff;
+            border-radius: 9999px;
+            box-shadow: 0 0 10px #ffffff, 0 0 20px #06b6d4;
+        }
+
+        /* Botón brillante con azul azul */
+        .btn-glow {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.7);
+            border: 1px solid #60a5fa;
+            transition: all 0.3s ease;
+        }
+
+        .btn-glow:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 1);
+        }
+
+        .btn-glow:active {
+            transform: scale(0.97);
+        }
+
+        /* Tipografías especiales */
+        .poem-text {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .handwritten {
+            font-family: 'Caveat', cursive;
+        }
+
+        /* Imágenes perfectamente circulares con halo azul */
+        .circle-avatar {
+            border-radius: 50% !important;
+            border: 3px solid #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CANVAS DE ESTRELLAS Y ESTRELLAS FUGACES -->
+    <canvas id="starsCanvas"></canvas>
+
+    <!-- Content Container (Un poco más amplio y cómodo) -->
+    <main class="relative z-10 w-full max-w-sm mx-auto px-3 overflow-hidden">
+        
+        <!-- ================= PANEL PRINCIPAL ================= -->
+        <div id="mainPanel" class="liquid-glass rounded-2xl p-5 text-center border border-blue-500/80">
+            
+            <!-- 1. Imagen Circular -->
+            <div class="relative w-24 h-24 mx-auto mb-3 animate-float">
+                <img 
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMfDRhXETEy8x4sudexFLBDEW8br1zZAkzNGoriU7C2Q&s" 
+                    alt="Dulces Sueños" 
+                    class="w-full h-full circle-avatar"
+                    onerror="this.src='https://placehold.co/120x120/1e293b/60a5fa?text=Noche'"
+                />
+            </div>
+
+            <!-- 2. Título -->
+            <h1 class="text-lg font-bold text-blue-100 mb-1 leading-tight">
+                Buenas Noches, Mi Loquita Linda ✨
+            </h1>
+            <p class="text-blue-300 text-base handwritten mb-3">
+                Que las estrellas cuiden tu descanso...
+            </p>
+
+            <!-- 3. Poema Corto -->
+            <div class="bg-blue-950/40 rounded-xl p-3 border border-blue-500/30 mb-4 text-center">
+                <p class="poem-text text-sm italic leading-snug text-blue-100">
+                    "Duerme tranquila mi reina adorada,<br>
+                    que en cada estrella dejé un beso para ti.<br>
+                    <strong class="text-cyan-300 font-semibold">Te quiero muchísimo</strong>, mi loquita amada."
+                </p>
+            </div>
+
+            <!-- 4. Botón de Acción -->
+            <button 
+                id="sendButton"
+                onclick="startSendingProcess()"
+                class="w-full btn-glow text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-1.5 text-sm tracking-wide transition-all group cursor-pointer"
+            >
+                <span>¿Desear buenas noches a</span>
+                <span class="purple-glow-text text-sm underline decoration-purple-400 decoration-2">yeison.ae</span><span>?</span>
+                <i data-lucide="heart" class="w-4 h-4 fill-pink-500 text-pink-400 group-hover:scale-125 transition-transform duration-300"></i>
+            </button>
+        </div>
+
+
+        <!-- ================= PANEL DE CARGA (3 SEGUNDOS) ================= -->
+        <div id="loadingPanel" class="hidden liquid-glass rounded-2xl p-5 text-center border border-blue-500/80">
+            
+            <!-- Imagen Circular Carga -->
+            <div class="relative w-24 h-24 mx-auto mb-3">
+                <img 
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKqk3BaZ_xK-4MNywngZAnqdnzICLvArlFiFCPxyqCshpsAbT7F2J762k&s" 
+                    alt="Enviando Dulces Sueños" 
+                    class="w-full h-full circle-avatar"
+                    onerror="this.src='https://placehold.co/120x120/1e293b/60a5fa?text=Cargando'"
+                />
+            </div>
+
+            <h2 class="text-lg font-bold text-blue-100 mb-1">Enviando Dulces Sueños...</h2>
+            <p class="text-xs text-blue-300/90 mb-5">Un momento especial para <span class="purple-glow-text font-bold">yeison.ae</span> 💫</p>
+
+            <!-- Barra de Progreso Diseñada de Cristal Neón -->
+            <div class="w-full glow-progress-track rounded-full h-4 p-0.5 mb-2 overflow-hidden">
+                <div id="progressBar" class="glow-progress-fill h-full rounded-full w-0 transition-all duration-75"></div>
+            </div>
+        </div>
+
+
+        <!-- ================= PANEL FINAL: SUEÑOS ENVIADOS ================= -->
+        <div id="successPanel" class="hidden liquid-glass rounded-2xl p-5 text-center border border-blue-500/80">
+            
+            <!-- Imagen Circular Éxito -->
+            <div class="relative w-24 h-24 mx-auto mb-3 animate-float">
+                <img 
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpSg58vMi1swsbkz-enJzehsTKspW2walnc273TiReDg&s=10" 
+                    alt="Dulces Sueños Enviados" 
+                    class="w-full h-full circle-avatar"
+                    onerror="this.src='https://placehold.co/120x120/1e293b/60a5fa?text=Enviado'"
+                />
+            </div>
+
+            <h2 class="text-lg font-bold text-blue-100 mb-2">
+                Enviado con éxito
+            </h2>
+            
+            <p class="text-xs text-blue-200 leading-relaxed mb-4 px-1">
+                Gracias por desearme dulce sueños espero también pases dulces sueños nos vemos mañana y tqm ❤️
+            </p>
+
+            <a 
+                href="https://www.instagram.com/yeison.ae?exln=MWI3bGVrNGRoY3IxYg%3D%3D&utm_source=qr" 
+                target="_blank" 
+                class="inline-flex p-3 bg-blue-900/50 hover:bg-blue-800/60 rounded-xl border border-blue-400/50 text-xs text-blue-200 items-center justify-center gap-2 transition-all w-full cursor-pointer shadow-md group"
+            >
+                <i data-lucide="instagram" class="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform"></i>
+                <span>Ver a <strong class="purple-glow-text">yeison.ae</strong></span>
+            </a>
+        </div>
+
+    </main>
+
+    <script>
+        // Inicializar iconos Lucide
+        lucide.createIcons();
+
+        // ----------------------------------------------------
+        // Canvas de Estrellas y Estrellas Fugaces Ajustado
+        // ----------------------------------------------------
+        const canvas = document.getElementById('starsCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let stars = [];
+        let shootingStars = [];
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initStars();
+        }
+
+        function initStars() {
+            stars = [];
+            // Cantidad moderada de estrellas
+            const count = Math.floor((width * height) / 5000); 
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 1.5 + 0.5,
+                    alpha: Math.random(), // Transparencia inicial totalmente independiente
+                    twinkleSpeed: Math.random() * 0.03 + 0.005, // Velocidad única de parpadeo por estrella
+                    twinkleDir: Math.random() < 0.5 ? 1 : -1, // Dirección única (brillando o apagándose)
+                    color: ['#ffffff', '#93c5fd', '#60a5fa', '#c084fc', '#e0e7ff'][Math.floor(Math.random() * 5)]
+                });
+            }
+        }
+
+        // Generar exactamente 3 estrellas fugaces cada 3 segundos
+        function spawnShootingStarsBatch() {
+            if (shootingStars.length === 0) {
+                for (let i = 0; i < 3; i++) {
+                    shootingStars.push({
+                        x: Math.random() * (width * 0.8),
+                        y: Math.random() * (height * 0.4),
+                        length: Math.random() * 120 + 80,
+                        speed: Math.random() * 9 + 6,
+                        angle: (35 + Math.random() * 15) * (Math.PI / 180),
+                        alpha: 1,
+                        thickness: Math.random() * 2 + 1
+                    });
+                }
+            }
+        }
+
+        // Intervalo exacto de 3 segundos para lanzar las estrellas fugaces
+        setInterval(spawnShootingStarsBatch, 3000);
+        // Lanzamiento inicial al cargar
+        spawnShootingStarsBatch();
+
+        function drawStars() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Fondo con degradado nocturno
+            const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+            bgGrad.addColorStop(0, '#020617');
+            bgGrad.addColorStop(0.5, '#07142b');
+            bgGrad.addColorStop(1, '#0b1e3d');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, width, height);
+
+            // Dibujar Estrellas con parpadeo desincronizado e independiente
+            stars.forEach(star => {
+                star.alpha += star.twinkleSpeed * star.twinkleDir;
+
+                // Al llegar a los límites, invertir dirección con nueva velocidad aleatoria
+                if (star.alpha >= 1) {
+                    star.alpha = 1;
+                    star.twinkleDir = -1;
+                    star.twinkleSpeed = Math.random() * 0.025 + 0.005;
+                } else if (star.alpha <= 0.1) {
+                    star.alpha = 0.1;
+                    star.twinkleDir = 1;
+                    star.twinkleSpeed = Math.random() * 0.025 + 0.005;
+                    // Posibilidad de recolocar ligeramente la estrella para simular estrellas nuevas
+                    if (Math.random() < 0.2) {
+                        star.x = Math.random() * width;
+                        star.y = Math.random() * height;
+                    }
+                }
+
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = star.color;
+                ctx.globalAlpha = star.alpha;
+                ctx.shadowBlur = star.radius * 3;
+                ctx.shadowColor = star.color;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            // Dibujar Estrellas Fugaces
+            for (let i = shootingStars.length - 1; i >= 0; i--) {
+                const s = shootingStars[i];
+                
+                const tailX = s.x - Math.cos(s.angle) * s.length;
+                const tailY = s.y - Math.sin(s.angle) * s.length;
+
+                const grad = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
+                grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+                grad.addColorStop(0.4, 'rgba(192, 132, 252, 0.8)');
+                grad.addColorStop(1, 'rgba(37, 99, 235, 0)');
+
+                ctx.beginPath();
+                ctx.moveTo(s.x, s.y);
+                ctx.lineTo(tailX, tailY);
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = s.thickness;
+                ctx.stroke();
+
+                s.x += Math.cos(s.angle) * s.speed;
+                s.y += Math.sin(s.angle) * s.speed;
+                s.alpha -= 0.012;
+
+                if (s.x > width || s.y > height || s.alpha <= 0) {
+                    shootingStars.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(drawStars);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        requestAnimationFrame(drawStars);
+
+
+        // ----------------------------------------------------
+        // Lógica de Paneles
+        // ----------------------------------------------------
+        // Lógica de Paneles con Animación de Deslizar a la Izquierda
+        // ----------------------------------------------------
+        const mainPanel = document.getElementById('mainPanel');
+        const loadingPanel = document.getElementById('loadingPanel');
+        const successPanel = document.getElementById('successPanel');
+        const progressBar = document.getElementById('progressBar');
+
+        function startSendingProcess() {
+            // Animación de salida hacia la izquierda
+            mainPanel.classList.add('slide-out-left');
+
+            setTimeout(() => {
+                mainPanel.classList.add('hidden');
+                mainPanel.classList.remove('slide-out-left');
+
+                loadingPanel.classList.remove('hidden');
+                loadingPanel.classList.add('slide-in-right');
+
+                setTimeout(() => {
+                    loadingPanel.classList.remove('slide-in-right');
+                    runLoadingTimer();
+                }, 700);
+            }, 650);
+        }
+
+        function runLoadingTimer() {
+            const totalTime = 3000; // Exactos 3 segundos
+            const intervalTime = 50; 
+            let elapsedTime = 0;
+
+            const timer = setInterval(() => {
+                elapsedTime += intervalTime;
+                const progressPercentage = Math.min((elapsedTime / totalTime) * 100, 100);
+
+                progressBar.style.width = `${progressPercentage}%`;
+
+                if (elapsedTime >= totalTime) {
+                    clearInterval(timer);
+                    showSuccessPanel();
+                }
+            }, intervalTime);
+        }
+
+        function showSuccessPanel() {
+            // Animación de salida hacia la izquierda para el panel de carga
+            loadingPanel.classList.add('slide-out-left');
+
+            setTimeout(() => {
+                loadingPanel.classList.add('hidden');
+                loadingPanel.classList.remove('slide-out-left');
+
+                successPanel.classList.remove('hidden');
+                successPanel.classList.add('slide-in-right');
+
+                setTimeout(() => {
+                    successPanel.classList.remove('slide-in-right');
+                }, 700);
+            }, 650);
+        }
+    </script>
+</body>
+</html>
